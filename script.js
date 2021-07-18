@@ -11,9 +11,18 @@ class Reduce {
     }, []);
   }
 
+  static deepFlat(array) {
+    return array.reduce(function (accumulator, currentValue) {
+      if (Array.isArray((currentValue))) {
+        currentValue =  currentValue.some(Array.isArray) ? Reduce.deepFlat(currentValue) : currentValue;
+      }
+      return accumulator.concat(currentValue);
+    }, []);
+  }
+
   static regroup(objectsArray, property) {
-    return Objects.reduce(function (accumulator, object) {
-      var propertyValue = object[property];
+    return objectsArray.reduce(function (accumulator, object) {
+      let propertyValue = object[property];
       if (!accumulator[propertyValue]) {accumulator[propertyValue] = [];}
       accumulator[propertyValue].push(object);
       return accumulator;
@@ -48,7 +57,7 @@ class Reduce {
       accumulator.unshift(currentValue);
       return accumulator;
     }, []);
-  },
+  }
 
   static chunk(array, size) {
     let index = 0;
@@ -58,7 +67,7 @@ class Reduce {
       if (accumulator[index].length === size) { index ++ }
       return accumulator;
     }, []);
-  },
+  }
 
   static invert(object) {
     return Object.entries(object).reduce(function (accumulator, [key, value]) {
